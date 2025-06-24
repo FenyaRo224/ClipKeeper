@@ -37,7 +37,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        startService(Intent(this, ClipboardListenerService::class.java))
+        val serviceIntent = Intent(this, ClipboardListenerService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ContextCompat.startForegroundService(this, serviceIntent)
+        } else {
+            startService(serviceIntent)
+        }
 
         adapter = HistoryAdapter(history) { index -> showEditDialog(index) }
         recyclerView = findViewById(R.id.recycler)

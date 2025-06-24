@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">ClipKeeper</string>
     <string name="empty_history">No clipboard history yet. Copy text to see it here.</string>
+    <!-- Text shown in the ongoing notification while the clipboard service is running. -->
+    <string name="service_notification">Listening for clipboard changes</string>
 </resources>
