@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import com.example.clipkeeper.ACTION_HISTORY_UPDATED
 
 /**
  * Background service that listens for clipboard changes.
@@ -12,8 +13,12 @@ import android.os.IBinder
 class ClipboardListenerService : Service() {
     private lateinit var clipboard: ClipboardManager
     private val listener = ClipboardManager.OnPrimaryClipChangedListener {
-        val data = clipboard.primaryClip?.getItemAt(0)?.coerceToText(this).toString()
-        ClipboardRepository.add(ClipboardItem(data))
+        val clip = clipboard.primaryClip
+        val data = clip?.getItemAt(0)?.coerceToText(this)?.toString().orEmpty()
+        if (data.isNotEmpty()) {
+            ClipboardRepository.add(ClipboardItem(data))
+            sendBroadcast(Intent(ACTION_HISTORY_UPDATED))
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -22,6 +27,13 @@ class ClipboardListenerService : Service() {
         super.onCreate()
         clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         clipboard.addPrimaryClipChangedListener(listener)
+        // If the user already has text copied before the service starts, store it
+        val clip = clipboard.primaryClip
+        val data = clip?.getItemAt(0)?.coerceToText(this)?.toString().orEmpty()
+        if (data.isNotEmpty()) {
+            ClipboardRepository.add(ClipboardItem(data))
+            sendBroadcast(Intent(ACTION_HISTORY_UPDATED))
+        }
     }
 
     override fun onDestroy() {

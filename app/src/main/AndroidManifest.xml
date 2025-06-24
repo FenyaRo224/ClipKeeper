@@ -23,6 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Register background listener service -->
+        <service
+            android:name=".ClipboardListenerService"
+            android:exported="false" />
     </application>
 
 </manifest>
