@@ -6,7 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.os.Bundle
-import android.os.Build
+import androidx.core.content.ContextCompat
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -32,59 +32,48 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        @@ -42,49 +42,44 @@ class MainActivity : AppCompatActivity() {
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = adapter
 
-        startService(Intent(this, ClipboardListenerService::class.java))
-
-        adapter = HistoryAdapter(history) { index -> showEditDialog(index) }
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
-
-        emptyView = findViewById(R.id.empty_view)
-        updateEmptyView()
-    }
-
-    private fun showEditDialog(index: Int) {
-        val item = history[index]
-        val input = EditText(this).apply { setText(item.content) }
-
-        AlertDialog.Builder(this)
-            .setTitle("Edit item")
-            .setView(input)
-            .setPositiveButton("Save") { _, _ ->
-                ClipboardRepository.update(index, input.text.toString())
-                adapter.notifyItemChanged(index)
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val filter = IntentFilter(ACTION_HISTORY_UPDATED)
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Context.RECEIVER_NOT_EXPORTED
-        } else {
-            0
+            emptyView = findViewById(R.id.empty_view)
+            updateEmptyView()
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerReceiver(receiver, filter, flags)
-        } else {
-            @Suppress("DEPRECATION")
-            registerReceiver(receiver, filter)
+
+        private fun showEditDialog(index: Int) {
+            val item = history[index]
+            val input = EditText(this).apply { setText(item.content) }
+
+            AlertDialog.Builder(this)
+                .setTitle("Edit item")
+                .setView(input)
+                .setPositiveButton("Save") { _, _ ->
+                    ClipboardRepository.update(index, input.text.toString())
+                    adapter.notifyItemChanged(index)
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
         }
-        adapter.notifyDataSetChanged()
-        updateEmptyView()
-    }
 
-    override fun onPause() {
-        unregisterReceiver(receiver)
-        super.onPause()
-    }
+        override fun onResume() {
+            super.onResume()
+            val filter = IntentFilter(ACTION_HISTORY_UPDATED)
+            ContextCompat.registerReceiver(
+                this,
+                receiver,
+                filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
+            adapter.notifyDataSetChanged()
+            updateEmptyView()
+        }
 
-    private fun updateEmptyView() {
-        emptyView.isVisible = history.isEmpty()
+        override fun onPause() {
+            unregisterReceiver(receiver)
+            super.onPause()
+        }
+
+        private fun updateEmptyView() {
+            emptyView.isVisible = history.isEmpty()
+        }
     }
-}
