@@ -3,4 +3,11 @@
     <string name="empty_history">No clipboard history yet. Copy text to see it here.</string>
     <!-- Text shown in the ongoing notification while the clipboard service is running. -->
     <string name="service_notification">Listening for clipboard changes</string>
+    <string name="notification_permission_required">Notification permission is required for background clipboard monitoring.</string>
+    <string name="accessibility_service_desc">Clipboard monitoring service</string>
+    <string name="enable_service_title">Enable Clipboard Monitor</string>
+    <string name="enable_service_message">To save copied text while the app is in the background, enable the accessibility service.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="refresh">Refresh</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
 </resources>

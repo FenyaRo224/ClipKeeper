@@ -14,10 +14,17 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.provider.Settings
+import android.text.TextUtils
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.ComponentName
 
 import com.example.clipkeeper.ACTION_HISTORY_UPDATED
 
@@ -29,10 +36,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: HistoryAdapter
     private lateinit var emptyView: TextView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var refreshButton: Button
 
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) startClipboardService()
+            if (!granted) {
+                Toast.makeText(
+                    this,
+                    R.string.notification_permission_required,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            // Start service regardless so clipboard history still works
+            startClipboardService()
         }
 
     private val receiver = object : BroadcastReceiver() {
@@ -46,6 +62,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Load any previously saved clipboard history
+        ClipboardRepository.init(applicationContext)
+
+        if (!isAccessibilityEnabled()) {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.enable_service_title)
+                .setMessage(R.string.enable_service_message)
+                .setPositiveButton(R.string.open_settings) { _, _ ->
+                    startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -54,12 +84,18 @@ class MainActivity : AppCompatActivity() {
             startClipboardService()
         }
 
-        adapter = HistoryAdapter(history) { index -> showEditDialog(index) }
+        adapter = HistoryAdapter(
+            history,
+            onItemClick = { index -> copyItem(index) },
+            onItemLongClick = { index -> showEditDialog(index) }
+        )
         recyclerView = findViewById(R.id.recycler)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
         emptyView = findViewById(R.id.empty_view)
+        refreshButton = findViewById(R.id.refresh_button)
+        refreshButton.setOnClickListener { refreshHistory() }
         updateEmptyView()
     }
 
@@ -102,6 +138,7 @@ class MainActivity : AppCompatActivity() {
         )
         adapter.notifyDataSetChanged()
         updateEmptyView()
+        startClipboardService()
     }
 
     override fun onPause() {
@@ -111,5 +148,29 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateEmptyView() {
         emptyView.isVisible = history.isEmpty()
+    }
+
+    private fun isAccessibilityEnabled(): Boolean {
+        val component = ComponentName(this, ClipboardAccessibilityService::class.java)
+        val enabledServices = Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        ) ?: return false
+        return enabledServices.split(':').any { TextUtils.equals(it, component.flattenToString()) }
+    }
+
+    private fun copyItem(index: Int) {
+        val item = history[index]
+        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("copied", item.content)
+        clipboard.setPrimaryClip(clip)
+        ClipboardRepository.incrementUsage(index)
+        adapter.notifyItemChanged(index)
+        Toast.makeText(this, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun refreshHistory() {
+        adapter.notifyDataSetChanged()
+        updateEmptyView()
     }
 }

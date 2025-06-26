@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class HistoryAdapter(
     private val items: List<ClipboardItem>,
-    private val onItemClick: (Int) -> Unit
+    private val onItemClick: (Int) -> Unit,
+    private val onItemLongClick: (Int) -> Unit
 ) : RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -27,6 +28,10 @@ class HistoryAdapter(
         holder.text.text = item.content
         holder.count.text = "Used ${item.usageCount}"
         holder.itemView.setOnClickListener { onItemClick(position) }
+        holder.itemView.setOnLongClickListener {
+            onItemLongClick(position)
+            true
+        }
     }
 
     override fun getItemCount() = items.size

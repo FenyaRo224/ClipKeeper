@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import android.os.Handler
+import android.os.Looper
 import androidx.core.app.NotificationCompat
 import com.example.clipkeeper.ACTION_HISTORY_UPDATED
 import com.example.clipkeeper.CHANNEL_ID
@@ -17,12 +19,15 @@ import com.example.clipkeeper.CHANNEL_ID
  */
 class ClipboardListenerService : Service() {
     private lateinit var clipboard: ClipboardManager
-    private val listener = ClipboardManager.OnPrimaryClipChangedListener {
-        val clip = clipboard.primaryClip
-        val data = clip?.getItemAt(0)?.coerceToText(this)?.toString().orEmpty()
-        if (data.isNotEmpty()) {
-            ClipboardRepository.add(ClipboardItem(data))
-            sendBroadcast(Intent(ACTION_HISTORY_UPDATED))
+    private var lastText: String? = null
+    private val clipListener = ClipboardManager.OnPrimaryClipChangedListener {
+        checkClipboard()
+    }
+    private val handler = Handler(Looper.getMainLooper())
+    private val pollRunnable = object : Runnable {
+        override fun run() {
+            checkClipboard()
+            handler.postDelayed(this, 1000)
         }
     }
 
@@ -30,7 +35,8 @@ class ClipboardListenerService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        // Prepare a foreground notification so the service can access the clipboard
+        ClipboardRepository.init(applicationContext)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val channel = NotificationChannel(
@@ -39,33 +45,48 @@ class ClipboardListenerService : Service() {
                 NotificationManager.IMPORTANCE_LOW
             )
             manager.createNotificationChannel(channel)
+            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.service_notification))
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .build()
+            startForeground(1, notification)
         }
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(getString(R.string.app_name))
-            // Display a small message so the user knows the service is active
-            .setContentText(getString(R.string.service_notification))
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .build()
-        startForeground(1, notification)
 
         clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboard.addPrimaryClipChangedListener(listener)
-        // If the user already has text copied before the service starts, store it
-        val clip = clipboard.primaryClip
-        val data = clip?.getItemAt(0)?.coerceToText(this)?.toString().orEmpty()
-        if (data.isNotEmpty()) {
-            ClipboardRepository.add(ClipboardItem(data))
-            sendBroadcast(Intent(ACTION_HISTORY_UPDATED))
+        lastText = clipboard.primaryClip?.getItemAt(0)?.coerceToText(this)?.toString()
+        lastText?.let {
+            if (it.isNotEmpty()) {
+                ClipboardRepository.add(ClipboardItem(it))
+                sendUpdate()
+            }
         }
+        clipboard.addPrimaryClipChangedListener(clipListener)
+
+        handler.post(pollRunnable)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Keep the service alive so clipboard updates continue to be received
         return START_STICKY
     }
 
     override fun onDestroy() {
-        clipboard.removePrimaryClipChangedListener(listener)
+        handler.removeCallbacks(pollRunnable)
+        clipboard.removePrimaryClipChangedListener(clipListener)
         super.onDestroy()
+    }
+
+    private fun checkClipboard() {
+        val data = clipboard.primaryClip?.getItemAt(0)?.coerceToText(this)?.toString()
+        if (!data.isNullOrEmpty() && data != lastText) {
+            lastText = data
+            ClipboardRepository.add(ClipboardItem(data))
+            sendUpdate()
+        }
+    }
+
+    private fun sendUpdate() {
+        val intent = Intent(ACTION_HISTORY_UPDATED).setPackage(packageName)
+        sendBroadcast(intent)
     }
 }
