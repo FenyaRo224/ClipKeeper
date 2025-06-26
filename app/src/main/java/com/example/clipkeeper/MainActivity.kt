@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Button
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +26,10 @@ import android.text.TextUtils
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.ComponentName
+import android.view.View
+import com.example.clipkeeper.Prefs
+import com.example.clipkeeper.ThemeUtils
+import com.example.clipkeeper.LanguageUtils
 
 import com.example.clipkeeper.ACTION_HISTORY_UPDATED
 
@@ -32,11 +37,24 @@ import com.example.clipkeeper.ACTION_HISTORY_UPDATED
  * Main screen showing clipboard history.
  */
 class MainActivity : AppCompatActivity() {
+    override fun attachBaseContext(newBase: Context) {
+        Prefs.init(newBase)
+        val ctx = LanguageUtils.applyBaseContext(newBase)
+        super.attachBaseContext(ctx)
+    }
     private val history = ClipboardRepository.history
     private lateinit var adapter: HistoryAdapter
     private lateinit var emptyView: TextView
     private lateinit var recyclerView: RecyclerView
-    private lateinit var refreshButton: Button
+    private lateinit var clearButton: Button
+    private lateinit var reportButton: Button
+    private lateinit var settingsButton: Button
+    private lateinit var searchView: SearchView
+    private var filtered: List<ClipboardItem> = history
+    private lateinit var clipboard: ClipboardManager
+    private val clipboardListener = ClipboardManager.OnPrimaryClipChangedListener {
+        handleClipboard()
+    }
 
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -53,12 +71,12 @@ class MainActivity : AppCompatActivity() {
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            adapter.notifyDataSetChanged()
-            updateEmptyView()
+            filter(searchView.query?.toString())
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -85,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         adapter = HistoryAdapter(
-            history,
+            filtered,
             onItemClick = { index -> copyItem(index) },
             onItemLongClick = { index -> showEditDialog(index) }
         )
@@ -94,8 +112,30 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         emptyView = findViewById(R.id.empty_view)
-        refreshButton = findViewById(R.id.refresh_button)
-        refreshButton.setOnClickListener { refreshHistory() }
+        searchView = findViewById(R.id.search_view)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                filter(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filter(newText)
+                return true
+            }
+        })
+        clearButton = findViewById(R.id.clear_button)
+        clearButton.setOnClickListener {
+            ClipboardRepository.clear()
+            filter(searchView.query?.toString())
+            updateEmptyView()
+        }
+        reportButton = findViewById(R.id.report_button)
+        reportButton.setOnClickListener { showUsageReport() }
+        settingsButton = findViewById(R.id.settings_button)
+        settingsButton.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
         updateEmptyView()
     }
 
@@ -136,18 +176,22 @@ class MainActivity : AppCompatActivity() {
             IntentFilter(ACTION_HISTORY_UPDATED),
             flags
         )
-        adapter.notifyDataSetChanged()
+        clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.addPrimaryClipChangedListener(clipboardListener)
+        handleClipboard()
+        filter(searchView.query?.toString())
         updateEmptyView()
         startClipboardService()
     }
 
     override fun onPause() {
+        clipboard.removePrimaryClipChangedListener(clipboardListener)
         unregisterReceiver(receiver)
         super.onPause()
     }
 
     private fun updateEmptyView() {
-        emptyView.isVisible = history.isEmpty()
+        emptyView.isVisible = filtered.isEmpty()
     }
 
     private fun isAccessibilityEnabled(): Boolean {
@@ -161,6 +205,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun copyItem(index: Int) {
         val item = history[index]
+        ClipboardRepository.markCopied(item.content)
         val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("copied", item.content)
         clipboard.setPrimaryClip(clip)
@@ -169,8 +214,45 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show()
     }
 
-    private fun refreshHistory() {
-        adapter.notifyDataSetChanged()
+    private fun filter(query: String?) {
+        filtered = if (query.isNullOrEmpty()) {
+            history
+        } else {
+            history.filter { it.content.contains(query, true) }
+        }
+        adapter.update(filtered)
         updateEmptyView()
     }
+
+    private fun handleClipboard() {
+        val clip = clipboard.primaryClip
+        if (clip != null && clip.itemCount > 0) {
+            val text = clip.getItemAt(0).coerceToText(this)?.toString()
+            if (!text.isNullOrBlank()) {
+                ClipboardRepository.add(ClipboardItem(text))
+                filter(searchView.query?.toString())
+            }
+        }
+    }
+
+    private fun showUsageReport() {
+        if (history.isEmpty()) {
+            Toast.makeText(this, R.string.no_usage_data, Toast.LENGTH_SHORT).show()
+            return
+        }
+        val usage = mutableMapOf<String, Int>()
+        history.forEach { item ->
+            val key = item.content
+            usage[key] = (usage[key] ?: 0) + item.usageCount
+        }
+        val report = usage.entries.joinToString("\n") {
+            "${it.key.take(20)}: ${it.value}"
+        }
+        AlertDialog.Builder(this)
+            .setTitle(R.string.usage_report)
+            .setMessage(report)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+    }
+
 }

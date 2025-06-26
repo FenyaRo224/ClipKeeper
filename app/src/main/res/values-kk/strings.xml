@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">ClipKeeper</string>
+    <string name="empty_history">Тарих бос. Мәтінді көру үшін көшіріңіз.</string>
+    <string name="service_notification">Алмасу буферін бақылау</string>
+    <string name="notification_permission_required">Хабарлама рұқсаты керек.</string>
+    <string name="accessibility_service_desc">Буферді бақылау қызметі</string>
+    <string name="enable_service_title">Бақылауды қосу</string>
+    <string name="enable_service_message">Мәтінді сақтау үшін арнайы қызметті қосыңыз.</string>
+    <string name="open_settings">Баптауларды ашу</string>
+    <string name="clear_history">Тазалау</string>
+    <string name="copied_to_clipboard">Көшірілді</string>
+    <string name="usage_report">Қолдану есебі</string>
+    <string name="no_usage_data">Дерек жоқ</string>
+    <string name="search_hint">Іздеу</string>
+    <string name="new_clipboard_item">Жаңа элемент</string>
+    <string name="image_copied">Сурет көшірілді</string>
+    <string name="file_copied">Файл көшірілді</string>
+    <string name="settings">Баптаулар</string>
+    <string name="choose_theme">Тақырып</string>
+    <string name="choose_language">Тіл</string>
+    <string name="save">Сақтау</string>
+</resources>

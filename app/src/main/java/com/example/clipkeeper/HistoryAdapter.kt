@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class HistoryAdapter(
-    private val items: List<ClipboardItem>,
+    private var items: List<ClipboardItem>,
     private val onItemClick: (Int) -> Unit,
     private val onItemLongClick: (Int) -> Unit
 ) : RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
@@ -25,7 +25,11 @@ class HistoryAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.text.text = item.content
+        holder.text.text = when (item.type) {
+            ClipboardType.TEXT -> item.content
+            ClipboardType.IMAGE -> "Image: ${item.content}"
+            ClipboardType.FILE -> "File: ${item.content}"
+        }
         holder.count.text = "Used ${item.usageCount}"
         holder.itemView.setOnClickListener { onItemClick(position) }
         holder.itemView.setOnLongClickListener {
@@ -35,4 +39,9 @@ class HistoryAdapter(
     }
 
     override fun getItemCount() = items.size
+
+    fun update(newItems: List<ClipboardItem>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 }

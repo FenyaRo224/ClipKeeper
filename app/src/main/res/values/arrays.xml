@@ -1,0 +1,30 @@
+<resources>
+    <string-array name="themes">
+        <item>Default</item>
+        <item>Green</item>
+        <item>Dark</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>default</item>
+        <item>green</item>
+        <item>dark</item>
+    </string-array>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Русский</item>
+        <item>中文</item>
+        <item>Español</item>
+        <item>Українська</item>
+        <item>Қазақша</item>
+        <item>Татарча</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>en</item>
+        <item>ru</item>
+        <item>zh</item>
+        <item>es</item>
+        <item>uk</item>
+        <item>kk</item>
+        <item>tt</item>
+    </string-array>
+</resources>

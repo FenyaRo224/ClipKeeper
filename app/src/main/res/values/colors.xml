@@ -1,3 +1,7 @@
 <resources>
     <color name="purple_500">#6200EE</color>
+    <color name="green_bg">#e0f2f1</color>
+    <color name="green_button">#a5d6a7</color>
+    <color name="dark_bg">#121212</color>
+    <color name="dark_button">#424242</color>
 </resources>

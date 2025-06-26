@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">ClipKeeper</string>
+    <string name="empty_history">Історія порожня. Скопіюйте текст, щоб побачити його тут.</string>
+    <string name="service_notification">Спостерігання за буфером</string>
+    <string name="notification_permission_required">Потрібен дозвіл на сповіщення.</string>
+    <string name="accessibility_service_desc">Служба моніторингу буфера</string>
+    <string name="enable_service_title">Увімкнути моніторинг</string>
+    <string name="enable_service_message">Щоб зберігати текст, увімкніть службу доступності.</string>
+    <string name="open_settings">Відкрити налаштування</string>
+    <string name="clear_history">Очистити</string>
+    <string name="copied_to_clipboard">Скопійовано</string>
+    <string name="usage_report">Звіт використання</string>
+    <string name="no_usage_data">Нема даних</string>
+    <string name="search_hint">Пошук</string>
+    <string name="new_clipboard_item">Новий елемент</string>
+    <string name="image_copied">Зображення скопійовано</string>
+    <string name="file_copied">Файл скопійовано</string>
+    <string name="settings">Налаштування</string>
+    <string name="choose_theme">Тема</string>
+    <string name="choose_language">Мова</string>
+    <string name="save">Зберегти</string>
+</resources>
