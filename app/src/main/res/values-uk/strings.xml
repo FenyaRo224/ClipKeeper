@@ -19,4 +19,6 @@
     <string name="choose_theme">Тема</string>
     <string name="choose_language">Мова</string>
     <string name="save">Зберегти</string>
+    <string name="back">Назад</string>
+    <string name="reset_defaults">Повернути початкові налаштування</string>
 </resources>

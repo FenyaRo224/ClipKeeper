@@ -2,9 +2,11 @@ package com.example.clipkeeper
 
 import android.content.Context
 import android.os.Bundle
+import android.content.res.Resources
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import java.util.Locale
 import androidx.appcompat.app.AppCompatActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -40,10 +42,35 @@ class SettingsActivity : AppCompatActivity() {
         val langValues = resources.getStringArray(R.array.language_values)
         langSpinner.setSelection(langValues.indexOf(Prefs.language))
 
-        findViewById<Button>(R.id.save_button).setOnClickListener {
+        val saveButton = findViewById<Button>(R.id.save_button)
+        val resetButton = findViewById<Button>(R.id.reset_button)
+        val backButton = findViewById<Button>(R.id.back_button)
+
+        saveButton.setOnClickListener {
             Prefs.theme = themeValues[themeSpinner.selectedItemPosition]
             Prefs.language = langValues[langSpinner.selectedItemPosition]
             recreate()
         }
+
+        resetButton.setOnClickListener {
+            Prefs.theme = "default"
+            val systemLang = Resources.getSystem().configuration.locales[0].language
+            Prefs.language = systemLang
+            recreate()
+        }
+
+        backButton.setOnClickListener {
+            setResult(RESULT_OK)
+            finish()
+        }
+
+        overridePendingTransition(0, 0)
+
+        ThemeUtils.decorateRoyal(saveButton, resetButton, backButton)
+    }
+
+    override fun onBackPressed() {
+        setResult(RESULT_OK)
+        super.onBackPressed()
     }
 }

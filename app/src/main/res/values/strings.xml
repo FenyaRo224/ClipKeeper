@@ -20,4 +20,6 @@
     <string name="choose_theme">Choose theme</string>
     <string name="choose_language">Choose language</string>
     <string name="save">Save</string>
+    <string name="back">Back</string>
+    <string name="reset_defaults">Reset to defaults</string>
 </resources>

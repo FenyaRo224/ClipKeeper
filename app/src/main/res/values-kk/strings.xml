@@ -19,4 +19,6 @@
     <string name="choose_theme">Тақырып</string>
     <string name="choose_language">Тіл</string>
     <string name="save">Сақтау</string>
+    <string name="back">Артқа</string>
+    <string name="reset_defaults">Бастапқы теңшелімдерге қайтару</string>
 </resources>

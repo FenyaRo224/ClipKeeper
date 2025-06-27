@@ -69,6 +69,12 @@ class MainActivity : AppCompatActivity() {
             startClipboardService()
         }
 
+    private val settingsLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            // Recreate activity to apply new language and theme
+            recreate()
+        }
+
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             filter(searchView.query?.toString())
@@ -85,12 +91,12 @@ class MainActivity : AppCompatActivity() {
 
         if (!isAccessibilityEnabled()) {
             AlertDialog.Builder(this)
-                .setTitle(R.string.enable_service_title)
-                .setMessage(R.string.enable_service_message)
-                .setPositiveButton(R.string.open_settings) { _, _ ->
+                .setTitle(ThemeUtils.withRoyal(getString(R.string.enable_service_title)))
+                .setMessage(ThemeUtils.withRoyal(getString(R.string.enable_service_message)))
+                .setPositiveButton(ThemeUtils.withRoyal(getString(R.string.open_settings))) { _, _ ->
                     startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
                 }
-                .setNegativeButton(android.R.string.cancel, null)
+                .setNegativeButton(ThemeUtils.withRoyal(getString(android.R.string.cancel)), null)
                 .show()
         }
 
@@ -134,8 +140,10 @@ class MainActivity : AppCompatActivity() {
         reportButton.setOnClickListener { showUsageReport() }
         settingsButton = findViewById(R.id.settings_button)
         settingsButton.setOnClickListener {
+            settingsLauncher.launch(Intent(this, SettingsActivity::class.java))
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+        ThemeUtils.decorateRoyal(clearButton, reportButton, settingsButton)
         updateEmptyView()
     }
 
@@ -144,13 +152,13 @@ class MainActivity : AppCompatActivity() {
         val input = EditText(this).apply { setText(item.content) }
 
         AlertDialog.Builder(this)
-            .setTitle("Edit item")
+            .setTitle(ThemeUtils.withRoyal("Edit item"))
             .setView(input)
-            .setPositiveButton("Save") { _, _ ->
+            .setPositiveButton(ThemeUtils.withRoyal("Save")) { _, _ ->
                 ClipboardRepository.update(index, input.text.toString())
                 adapter.notifyItemChanged(index)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(ThemeUtils.withRoyal("Cancel"), null)
             .show()
     }
 
@@ -211,7 +219,8 @@ class MainActivity : AppCompatActivity() {
         clipboard.setPrimaryClip(clip)
         ClipboardRepository.incrementUsage(index)
         adapter.notifyItemChanged(index)
-        Toast.makeText(this, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show()
+        val text = ThemeUtils.withRoyal(getString(R.string.copied_to_clipboard))
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
     private fun filter(query: String?) {
@@ -237,7 +246,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun showUsageReport() {
         if (history.isEmpty()) {
-            Toast.makeText(this, R.string.no_usage_data, Toast.LENGTH_SHORT).show()
+            val msg = ThemeUtils.withRoyal(getString(R.string.no_usage_data))
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
             return
         }
         val usage = mutableMapOf<String, Int>()
@@ -248,9 +258,11 @@ class MainActivity : AppCompatActivity() {
         val report = usage.entries.joinToString("\n") {
             "${it.key.take(20)}: ${it.value}"
         }
+        val title = ThemeUtils.withRoyal(getString(R.string.usage_report))
+        val decoratedReport = ThemeUtils.withRoyal(report)
         AlertDialog.Builder(this)
-            .setTitle(R.string.usage_report)
-            .setMessage(report)
+            .setTitle(title)
+            .setMessage(decoratedReport)
             .setPositiveButton(android.R.string.ok, null)
             .show()
     }

@@ -19,4 +19,6 @@
     <string name="choose_theme">选择主题</string>
     <string name="choose_language">选择语言</string>
     <string name="save">保存</string>
+    <string name="back">返回</string>
+    <string name="reset_defaults">恢复默认设置</string>
 </resources>

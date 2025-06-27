@@ -19,18 +19,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:padding="4dp"
             android:text="@string/clear_history" />
         <Button
             android:id="@+id/report_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:padding="4dp"
             android:text="@string/usage_report" />
         <Button
             android:id="@+id/settings_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:padding="4dp"
             android:text="@string/settings" />
     </LinearLayout>
 

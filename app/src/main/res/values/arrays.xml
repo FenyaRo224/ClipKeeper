@@ -1,13 +1,51 @@
 <resources>
     <string-array name="themes">
         <item>Default</item>
-        <item>Green</item>
         <item>Dark</item>
+        <item>Gray</item>
+        <item>Pastel Blue</item>
+        <item>Pastel Pink</item>
+        <item>Pastel Purple</item>
+        <item>Pastel Yellow</item>
+        <item>Pastel Red</item>
+        <item>Pastel Orange</item>
+        <item>Pastel Mint</item>
+        <item>Pastel Teal</item>
+        <item>Pastel Lavender</item>
+        <item>Pastel Peach</item>
+        <item>Pastel Green</item>
+        <item>Neon Cyber</item>
+        <item>Neon Sunset</item>
+        <item>Royal Gold</item>
+        <item>Dark Gold</item>
+        <item>Dark Red</item>
+        <item>Dark Pink</item>
+        <item>Dark Blue</item>
+        <item>Dark Purple</item>
     </string-array>
     <string-array name="theme_values">
         <item>default</item>
-        <item>green</item>
         <item>dark</item>
+        <item>gray</item>
+        <item>pastelBlue</item>
+        <item>pastelPink</item>
+        <item>pastelPurple</item>
+        <item>pastelYellow</item>
+        <item>pastelRed</item>
+        <item>pastelOrange</item>
+        <item>pastelMint</item>
+        <item>pastelTeal</item>
+        <item>pastelLavender</item>
+        <item>pastelPeach</item>
+        <item>pastelGreen</item>
+        <item>neonCyber</item>
+        <item>neonSunset</item>
+        <item>royalGold</item>
+        <item>darkGold</item>
+        <item>darkRed</item>
+        <item>darkPink</item>
+        <item>darkBlue</item>
+        <item>darkPurple</item>
     </string-array>
     <string-array name="languages">
         <item>English</item>

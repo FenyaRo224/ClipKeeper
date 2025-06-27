@@ -2,14 +2,120 @@
     <style name="Theme.ClipKeeper" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
     </style>
-    <style name="Theme.ClipKeeper.Green" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:colorBackground">@color/green_bg</item>
-        <item name="colorPrimary">@color/green_button</item>
+    <style name="Theme.ClipKeeper.PastelGreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_green_bg</item>
+        <item name="colorPrimary">@color/pastel_green_button</item>
         <item name="colorOnPrimary">@android:color/black</item>
     </style>
     <style name="Theme.ClipKeeper.Dark" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:colorBackground">@color/dark_bg</item>
         <item name="colorPrimary">@color/dark_button</item>
         <item name="colorOnPrimary">@android:color/white</item>
+    </style>
+    <style name="Theme.ClipKeeper.Gray" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/gray_bg</item>
+        <item name="colorPrimary">@color/gray_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <!-- Pastel themes -->
+    <style name="Theme.ClipKeeper.PastelBlue" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_blue_bg</item>
+        <item name="colorPrimary">@color/pastel_blue_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <style name="Theme.ClipKeeper.PastelPink" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_pink_bg</item>
+        <item name="colorPrimary">@color/pastel_pink_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <style name="Theme.ClipKeeper.PastelPurple" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_purple_bg</item>
+        <item name="colorPrimary">@color/pastel_purple_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <style name="Theme.ClipKeeper.PastelYellow" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_yellow_bg</item>
+        <item name="colorPrimary">@color/pastel_yellow_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <style name="Theme.ClipKeeper.PastelRed" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_red_bg</item>
+        <item name="colorPrimary">@color/pastel_red_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <style name="Theme.ClipKeeper.PastelOrange" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_orange_bg</item>
+        <item name="colorPrimary">@color/pastel_orange_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <style name="Theme.ClipKeeper.PastelMint" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_mint_bg</item>
+        <item name="colorPrimary">@color/pastel_mint_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <style name="Theme.ClipKeeper.PastelTeal" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_teal_bg</item>
+        <item name="colorPrimary">@color/pastel_teal_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <style name="Theme.ClipKeeper.PastelLavender" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_lavender_bg</item>
+        <item name="colorPrimary">@color/pastel_lavender_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <style name="Theme.ClipKeeper.PastelPeach" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/pastel_peach_bg</item>
+        <item name="colorPrimary">@color/pastel_peach_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <!-- Neon themes -->
+    <style name="Theme.ClipKeeper.NeonCyber" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:colorBackground">@color/neon_cyber_bg</item>
+        <item name="colorPrimary">@color/neon_cyber_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <style name="Theme.ClipKeeper.NeonSunset" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:colorBackground">@color/neon_sunset_bg</item>
+        <item name="colorPrimary">@color/neon_sunset_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+    </style>
+    <!-- Royal theme -->
+    <style name="Theme.ClipKeeper.RoyalGold" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:colorBackground">@color/royal_gold_bg</item>
+        <item name="colorPrimary">@color/royal_gold_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="colorOnBackground">@android:color/black</item>
+    </style>
+    <!-- Extra dark themes -->
+    <style name="Theme.ClipKeeper.DarkGold" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:colorBackground">@color/black_bg</item>
+        <item name="colorPrimary">@color/dark_gold_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="colorOnBackground">@android:color/white</item>
+    </style>
+    <style name="Theme.ClipKeeper.DarkRed" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:colorBackground">@color/black_bg</item>
+        <item name="colorPrimary">@color/dark_red_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="colorOnBackground">@android:color/white</item>
+    </style>
+    <style name="Theme.ClipKeeper.DarkPink" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:colorBackground">@color/black_bg</item>
+        <item name="colorPrimary">@color/dark_pink_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="colorOnBackground">@android:color/white</item>
+    </style>
+    <style name="Theme.ClipKeeper.DarkBlue" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:colorBackground">@color/black_bg</item>
+        <item name="colorPrimary">@color/dark_blue_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="colorOnBackground">@android:color/white</item>
+    </style>
+    <style name="Theme.ClipKeeper.DarkPurple" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:colorBackground">@color/black_bg</item>
+        <item name="colorPrimary">@color/dark_purple_button</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="colorOnBackground">@android:color/white</item>
     </style>
 </resources>

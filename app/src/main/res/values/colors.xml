@@ -1,7 +1,45 @@
 <resources>
     <color name="purple_500">#6200EE</color>
-    <color name="green_bg">#e0f2f1</color>
-    <color name="green_button">#a5d6a7</color>
+    <color name="pastel_green_bg">#e0f2f1</color>
+    <color name="pastel_green_button">#a5d6a7</color>
     <color name="dark_bg">#121212</color>
     <color name="dark_button">#424242</color>
+    <color name="black_bg">#000000</color>
+    <color name="gray_bg">#f0f0f0</color>
+    <color name="gray_button">#cccccc</color>
+    <!-- Pastel themes -->
+    <color name="pastel_blue_bg">#E3F2FD</color>
+    <color name="pastel_blue_button">#BBDEFB</color>
+    <color name="pastel_pink_bg">#FCE4EC</color>
+    <color name="pastel_pink_button">#F8BBD0</color>
+    <color name="pastel_purple_bg">#EDE7F6</color>
+    <color name="pastel_purple_button">#D1C4E9</color>
+    <color name="pastel_yellow_bg">#FFF9C4</color>
+    <color name="pastel_yellow_button">#FFF59D</color>
+    <color name="pastel_red_bg">#FFEBEE</color>
+    <color name="pastel_red_button">#FFCDD2</color>
+    <color name="pastel_orange_bg">#FFF3E0</color>
+    <color name="pastel_orange_button">#FFE0B2</color>
+    <color name="pastel_mint_bg">#E0F2F1</color>
+    <color name="pastel_mint_button">#B2DFDB</color>
+    <color name="pastel_teal_bg">#E0F7FA</color>
+    <color name="pastel_teal_button">#B2EBF2</color>
+    <color name="pastel_lavender_bg">#F3E5F5</color>
+    <color name="pastel_lavender_button">#E1BEE7</color>
+    <color name="pastel_peach_bg">#FBE9E7</color>
+    <color name="pastel_peach_button">#FFCCBC</color>
+    <!-- Neon themes -->
+    <color name="neon_cyber_bg">#AA00FF</color>
+    <color name="neon_cyber_button">#00F5FF</color>
+    <color name="neon_sunset_bg">#FF006E</color>
+    <color name="neon_sunset_button">#FF9100</color>
+    <!-- Royal theme -->
+    <color name="royal_gold_bg">#FFF2B2</color>
+    <color name="royal_gold_button">#FFD700</color>
+    <!-- Extra dark themes -->
+    <color name="dark_gold_button">#FFC107</color>
+    <color name="dark_red_button">#FF1744</color>
+    <color name="dark_pink_button">#F50057</color>
+    <color name="dark_blue_button">#2979FF</color>
+    <color name="dark_purple_button">#651FFF</color>
 </resources>
